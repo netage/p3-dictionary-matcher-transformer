@@ -23,14 +23,14 @@ import org.apache.stanbol.commons.indexedgraph.IndexedMGraph;
  */
 public class Reader {
 
-    public static DictionaryStore readDictionary(InputStream inputStream) {
+    public static DictionaryStore readDictionary(InputStream inputStream, String contentType) {
         Triple triple;
         Resource resource;
         String label, lang;
 
         DictionaryStore dictionary = new DictionaryStore();
         MGraph graph = new IndexedMGraph();
-        Parser.getInstance().parse(graph, inputStream, "application/rdf+xml");
+        Parser.getInstance().parse(graph, inputStream, contentType);
         Iterator<Triple> typeTriples = graph.filter(null, RDF.type, SKOS04.Concept);
         while (typeTriples.hasNext()) {
             NonLiteral s = typeTriples.next().getSubject();
@@ -75,7 +75,6 @@ public class Reader {
                     }
 
                     if (StringUtils.isNotBlank(label) && StringUtils.isNotBlank(concept.getUnicodeString())) {
-                    	System.out.println(label);
                         dictionary.addOriginalElement(label, SKOS04.altLabel, concept.getUnicodeString());
                     }
                 }

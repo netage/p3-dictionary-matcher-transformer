@@ -93,7 +93,7 @@ public class DictionaryMatcherTransformer extends RdfGeneratingTransformer {
 
         // get stemming language
         String stemmingLanguage = queryParams.get("stemming");
-        System.out.println(caseSensitivity);
+  
         DictionaryStore dictionaryStore = null;
         InputStream inputStream;
         Object lock;
@@ -118,11 +118,12 @@ public class DictionaryMatcherTransformer extends RdfGeneratingTransformer {
                         uri = Reader.class.getResource("/" + taxonomy).toURI();
                     }
                     URLConnection connection = uri.toURL().openConnection();
-                    connection.setRequestProperty("Accept", "application/rdf+xml");
+                    String contentType = connection.getContentType();
+                    //connection.setRequestProperty("Accept", "application/rdf+xml");
                     inputStream = connection.getInputStream();
 
                     // get the dictionary from reading the SKOS file
-                    dictionaryStore = Reader.readDictionary(inputStream);
+                    dictionaryStore = Reader.readDictionary(inputStream, contentType);
                     
                     // process taxonomy
                     dictionaryAnnotator = new DictionaryAnnotator(dictionaryStore, stemmingLanguage, caseSensitivity, 0);
