@@ -75,6 +75,7 @@ public class Reader {
                     }
 
                     if (StringUtils.isNotBlank(label) && StringUtils.isNotBlank(concept.getUnicodeString())) {
+                    	System.out.println(label);
                         dictionary.addOriginalElement(label, SKOS04.altLabel, concept.getUnicodeString());
                     }
                 }

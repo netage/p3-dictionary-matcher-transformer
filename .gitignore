@@ -1,2 +1,5 @@
-target
 nbactions.xml
+/target/
+/.settings/
+/.project
+/.classpath

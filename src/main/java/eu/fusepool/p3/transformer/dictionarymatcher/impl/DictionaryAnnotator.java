@@ -179,6 +179,7 @@ public class DictionaryAnnotator {
 
             for (Span span : spans) {
                 word = terms[i].substring(span.getStart(), span.getEnd());
+
                 if (caseSensitive) {
                     if (caseSensitiveLength > 0) {
                         if (word.length() > caseSensitiveLength) {

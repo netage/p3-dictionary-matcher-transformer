@@ -83,11 +83,17 @@ public class DictionaryMatcherTransformer extends RdfGeneratingTransformer {
             throw new TransformerException(HttpServletResponse.SC_BAD_REQUEST, "ERROR: Taxonomy URI was not provided! \nUsage: http://<transformer>/?taxonomy=<taxonomy_URI>");
         }
 
-        boolean caseSensitivity = queryParams.get("casesensitive") != null;
+        boolean caseSensitivity = false;
+        
+        if(queryParams.get("casesensitive") != null){
+        	if(queryParams.get("casesensitive").toLowerCase().equals("true")){
+        		caseSensitivity = true;
+        	}
+        }
 
         // get stemming language
         String stemmingLanguage = queryParams.get("stemming");
-
+        System.out.println(caseSensitivity);
         DictionaryStore dictionaryStore = null;
         InputStream inputStream;
         Object lock;
@@ -117,7 +123,7 @@ public class DictionaryMatcherTransformer extends RdfGeneratingTransformer {
 
                     // get the dictionary from reading the SKOS file
                     dictionaryStore = Reader.readDictionary(inputStream);
-
+                    
                     // process taxonomy
                     dictionaryAnnotator = new DictionaryAnnotator(dictionaryStore, stemmingLanguage, caseSensitivity, 0);
 
