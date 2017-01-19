@@ -130,12 +130,9 @@ public class DictionaryMatcherTransformer extends RdfGeneratingTransformer {
 
                     // add it to cache
                     Cache.setTaxonomy(taxonomy, dictionaryAnnotator);
-                }catch(Exception e){
-                	   e.printStackTrace();
-                   }
-               // } catch (URISyntaxException | NullPointerException | IOException e) {
-               //     throw new TransformerException(HttpServletResponse.SC_BAD_REQUEST, "ERROR: Taxonomy URI is invalid! (\"" + taxonomy + "\")");
-              //  }
+                } catch (URISyntaxException | NullPointerException | IOException e) {
+                    throw new TransformerException(HttpServletResponse.SC_BAD_REQUEST, "ERROR: Taxonomy URI is invalid! (\"" + taxonomy + "\")");
+                }
             } else {
                 cache = "(CACHED) ";
                 // get it from cache
