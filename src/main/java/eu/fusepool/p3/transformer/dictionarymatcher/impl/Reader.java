@@ -30,6 +30,7 @@ public class Reader {
 
         DictionaryStore dictionary = new DictionaryStore();
         MGraph graph = new IndexedMGraph();
+        
         Parser.getInstance().parse(graph, inputStream, contentType);
         Iterator<Triple> typeTriples = graph.filter(null, RDF.type, SKOS04.Concept);
         while (typeTriples.hasNext()) {
