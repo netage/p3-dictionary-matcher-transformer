@@ -53,7 +53,7 @@ public class Extractor {
         // loading opennlp tokenizer model
         Tokenizer tokenizer = null;
         try {
-            InputStream inputStream = this.getClass().getResourceAsStream("/nl-token.bin");
+            InputStream inputStream = this.getClass().getResourceAsStream("/en-token.bin");
             TokenizerModel modelTok = new TokenizerModel(inputStream);
             tokenizer = new TokenizerME(modelTok);
         } catch (IOException e) {
@@ -73,7 +73,7 @@ public class Extractor {
         List<Annotation> entities = findEntities(processedText);
 
         // eliminate overlapping entities
-        eliminateOverlapping(entities);
+        //eliminateOverlapping(entities);
 
         List<Annotation> entitiesToReturn = new ArrayList<>();
         for (Annotation e : entities) {
