@@ -201,8 +201,10 @@ public class DictionaryMatcherTransformer extends RdfGeneratingTransformer {
                 node = new GraphNode(new UriRef(annotationBody), result);
                 node.addProperty(RDF.type, FAM.LinkedEntity);
                 if (e.getAltLabel() != null) {
+                	node.addPropertyValue(new UriRef("http://vocab.fusepool.info/fam#label-type"), "altLabel");
                     node.addPropertyValue(FAM.entity_label, e.getAltLabel());
                 } else {
+                	node.addPropertyValue(new UriRef("http://vocab.fusepool.info/fam#label-type"), "prefLabel");
                     node.addPropertyValue(FAM.entity_label, e.getPrefLabel());
                 }
                 node.addProperty(FAM.entity_reference, new UriRef(e.getUri()));
