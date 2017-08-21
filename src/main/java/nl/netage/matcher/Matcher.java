@@ -33,9 +33,14 @@ public class Matcher extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		SyncTransformer transformer = new DictionaryMatcherTransformer();
+		try {
 		Entity responseEntity = transformer.transform(new HttpRequestEntity(request));
 		writeResponse(responseEntity, response);
-
+	} catch (TransformerException e) {
+		e.printStackTrace();
+		response.setStatus(e.getStatusCode());
+		writeResponse(e.getResponseEntity(), response);
+	}
 	}
 
 	/**
@@ -49,6 +54,7 @@ public class Matcher extends HttpServlet {
 			Entity responseEntity = transformer.transform(new HttpRequestEntity(request));
 			writeResponse(responseEntity, response);
 		} catch (TransformerException e) {
+			e.printStackTrace();
 			response.setStatus(e.getStatusCode());
 			writeResponse(e.getResponseEntity(), response);
 		}

@@ -176,12 +176,14 @@ public class DictionaryMatcherTransformer extends RdfGeneratingTransformer {
                 data = IOUtils.toString(entity.getData(), "UTF-8");
             }
         } catch (MimeTypeParseException e) {
+        	e.printStackTrace();
             throw new RuntimeException(e);
         }
 
         final TripleCollection result = new SimpleMGraph();
         GraphNode node;
         // if data is empty or blank do not invoke the annotator
+        try {
         if (StringUtils.isNotBlank(data)) {
             int i = 1;
             // create extractor instance
@@ -236,7 +238,11 @@ public class DictionaryMatcherTransformer extends RdfGeneratingTransformer {
                 i++;
             }
         } else {
-            throw new TransformerException(HttpServletResponse.SC_BAD_REQUEST, "ERROR: Input text was not provided!");
+        	throw new TransformerException(HttpServletResponse.SC_BAD_REQUEST, "ERROR: Input text was not provided!");
+        }
+        }catch (Exception e)
+        {
+        	e.printStackTrace();
         }
 
         return result;
