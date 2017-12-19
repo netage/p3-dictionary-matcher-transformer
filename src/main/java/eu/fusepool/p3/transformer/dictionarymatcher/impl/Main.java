@@ -2,6 +2,7 @@ package eu.fusepool.p3.transformer.dictionarymatcher.impl;
 
 import java.util.List;
 import org.apache.clerezza.rdf.ontologies.SKOS04;
+import org.apache.jena.vocabulary.SKOS;
 
 /**
  * Test class for DMA
@@ -20,21 +21,21 @@ public class Main {
     static String testSpec = "Az első Őr Pr a Prség vízben Ŋaaa and Jaaa lerakni az Őrség ČäÁÓý €řЖжЦ №ЯФКЛ.";
 
     static Concept[] dict = {
-        new Concept("Barack Hussein Obama", SKOS04.prefLabel, "http://en.wikipedia.org/wiki/Barack_Obama", "Person"),
-        new Concept("United States", SKOS04.prefLabel, "http://en.wikipedia.org/wiki/United_States", "Location"),
-        new Concept("President", SKOS04.prefLabel, "http://en.wikipedia.org/wiki/President", "Misc"),
-        new Concept("Illinois Senate", SKOS04.prefLabel, "http://en.wikipedia.org/wiki/Illinois_Senate", "Organization"),
-        new Concept("Honolulu", SKOS04.prefLabel, "http://en.wikipedia.org/wiki/Honolulu", "Location"),
-        new Concept("Hawaii", SKOS04.prefLabel, "http://en.wikipedia.org/wiki/Hawaii", "Location")
+        new Concept("Barack Hussein Obama", SKOS.prefLabel, "http://en.wikipedia.org/wiki/Barack_Obama", "Person"),
+        new Concept("United States", SKOS.prefLabel, "http://en.wikipedia.org/wiki/United_States", "Location"),
+        new Concept("President", SKOS.prefLabel, "http://en.wikipedia.org/wiki/President", "Misc"),
+        new Concept("Illinois Senate", SKOS.prefLabel, "http://en.wikipedia.org/wiki/Illinois_Senate", "Organization"),
+        new Concept("Honolulu", SKOS.prefLabel, "http://en.wikipedia.org/wiki/Honolulu", "Location"),
+        new Concept("Hawaii", SKOS.prefLabel, "http://en.wikipedia.org/wiki/Hawaii", "Location")
     };
 
     static Concept[] dictSpec = {
-        new Concept("Őr", SKOS04.prefLabel, "uri1", "Entity"),
-        new Concept("Őrség", SKOS04.prefLabel, "uri2", "Entity"),
-        new Concept("Ŋaaa", SKOS04.prefLabel, "uri3", "Entity"),
-        new Concept("€řЖжЦ №ЯФКЛ", SKOS04.prefLabel, "uri4", "Entity"),
-        new Concept("első", SKOS04.prefLabel, "uri5", "Entity"),
-        new Concept("ČäÁÓý", SKOS04.prefLabel, "uri6", "Entity")
+        new Concept("Őr", SKOS.prefLabel, "uri1", "Entity"),
+        new Concept("Őrség", SKOS.prefLabel, "uri2", "Entity"),
+        new Concept("Ŋaaa", SKOS.prefLabel, "uri3", "Entity"),
+        new Concept("€řЖжЦ №ЯФКЛ", SKOS.prefLabel, "uri4", "Entity"),
+        new Concept("első", SKOS.prefLabel, "uri5", "Entity"),
+        new Concept("ČäÁÓý", SKOS.prefLabel, "uri6", "Entity")
     };
 
     private static DictionaryStore dictionary;

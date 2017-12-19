@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import org.apache.clerezza.rdf.core.UriRef;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
 
 /**
  * This class represents the dictionary using a HashMap to store the entity - URI pairs for fast retrieval.
@@ -40,16 +41,16 @@ public class DictionaryStore {
      * Add new element to the dictionary without any change.
      *
      * @param labelText
-     * @param labelType
+     * @param preflabel
      * @param uri
      */
-    public void addOriginalElement(String labelText, UriRef labelType, String uri) {
+    public void addOriginalElement(String labelText, Property preflabel, String uri) {
         Concept concept;
 
         if (keywords.containsKey(labelText)) {
             concept = keywords.get(labelText);
         } else {
-            concept = new Concept(labelText, labelType, uri);
+            concept = new Concept(labelText, preflabel, uri);
         }
 
         keywords.put(labelText, concept);
@@ -67,7 +68,7 @@ public class DictionaryStore {
      * @param type
      * @param uri
      */
-    public void addOriginalElement(String labelText, UriRef labelType, String uri, String type) {
+    public void addOriginalElement(String labelText, RDFNode labelType, String uri, String type) {
         Concept concept;
 
         if (keywords.containsKey(labelText)) {
