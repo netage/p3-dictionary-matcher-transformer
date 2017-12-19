@@ -8,6 +8,7 @@ import java.util.List;
 
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
+import opennlp.tools.stemmer.snowball.SnowballStemmer.ALGORITHM;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
@@ -29,6 +30,7 @@ public class Extractor {
 	private int caseSensitiveLength;
 	private boolean eliminateOverlapping = false;
 	private String stemmingLanguage;
+	private ALGORITHM stemmingAlgorithm;
 	private Boolean stemming;
 
 	public Extractor(DictionaryAnnotator da) {
@@ -40,6 +42,7 @@ public class Extractor {
 		this.caseSensitiveLength = da.caseSensitiveLength;
 		this.stemmingLanguage = da.stemmingLanguage;
 		this.stemming = da.stemming;
+		this.stemmingAlgorithm = da.stemmingAlgorithm;
 	}
 
 	/**
@@ -55,7 +58,11 @@ public class Extractor {
 		// loading opennlp tokenizer model
 		Tokenizer tokenizer = null;
 		try {
-			InputStream inputStream = this.getClass().getResourceAsStream("/nl-token.bin");
+			String tokenizeLanguageFilename = "/en-token.bin";
+			if(stemmingLanguage.equals("dutch")){
+				tokenizeLanguageFilename = "/nl-token.bin";
+			}
+			InputStream inputStream = this.getClass().getResourceAsStream(tokenizeLanguageFilename);
 			TokenizerModel modelTok = new TokenizerModel(inputStream);
 			tokenizer = new TokenizerME(modelTok);
 		} catch (IOException e) {
@@ -213,7 +220,7 @@ public class Extractor {
 		String word;
 		StringBuilder sb;
 
-		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.DUTCH);
+		Stemmer stemmer = new SnowballStemmer(stemmingAlgorithm);
 		sb = new StringBuilder();
 		sb.append(" ");
 

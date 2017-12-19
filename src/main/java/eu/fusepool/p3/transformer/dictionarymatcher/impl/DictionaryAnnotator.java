@@ -13,6 +13,7 @@ import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
+import opennlp.tools.stemmer.snowball.SnowballStemmer.ALGORITHM;
 import opennlp.tools.util.Span;
 import org.apache.commons.lang.StringUtils;
 import org.arabidopsis.ahocorasick.AhoCorasick;
@@ -33,8 +34,9 @@ public class DictionaryAnnotator {
 	public boolean caseSensitive;
 	public int caseSensitiveLength;
 	public String stemmingLanguage;
+	public ALGORITHM stemmingAlgorithm;
 	public Boolean stemming;
-	private final Map<String, String> languages;
+	private final Map<String, ALGORITHM> languages;
 
 	/**
 	 * Initializes the dictionary annotator by reading the dictionary and building the search tree which is the soul of
@@ -55,7 +57,11 @@ public class DictionaryAnnotator {
 		// loading opennlp tokenizer model
 		Tokenizer tokenizer = null;
 		try {
-			InputStream inputStream = this.getClass().getResourceAsStream("/nl-token.bin");
+			String tokenizeLanguageFilename = "/en-token.bin";
+			if(stemmingLanguage.equals("dutch")){
+				tokenizeLanguageFilename = "/nl-token.bin";
+			}
+			InputStream inputStream = this.getClass().getResourceAsStream(tokenizeLanguageFilename);
 			TokenizerModel modelTok = new TokenizerModel(inputStream);
 			tokenizer = new TokenizerME(modelTok);
 		} catch (IOException e) {
@@ -70,31 +76,31 @@ public class DictionaryAnnotator {
 		// create a mapping between the language and the name of the class
 		// responsible for the stemming of the current language
 		languages = new HashMap<>();
-		languages.put("none", "");
-		languages.put("danish", "danishStemmer");
-		languages.put("dutch", "dutchStemmer");
-		languages.put("english", "englishStemmer");
-		languages.put("finnish", "finnishStemmer");
-		languages.put("french", "frenchStemmer");
-		languages.put("german", "germanStemmer");
-		languages.put("hungarian", "hungarianStemmer");
-		languages.put("italian", "italianStemmer");
-		languages.put("norwegian", "norwegianStemmer");
-		languages.put("english2", "porterStemmer");
-		languages.put("portuguese", "portugueseStemmer");
-		languages.put("romanian", "romanianStemmer");
-		languages.put("russian", "russianStemmer");
-		languages.put("spanish", "spanishStemmer");
-		languages.put("swedish", "swedishStemmer");
-		languages.put("turkish", "turkishStemmer");
+		languages.put("none", null);
+		languages.put("danish", SnowballStemmer.ALGORITHM.DANISH);
+		languages.put("dutch", SnowballStemmer.ALGORITHM.DUTCH);
+		languages.put("english", SnowballStemmer.ALGORITHM.ENGLISH);
+		languages.put("finnish", SnowballStemmer.ALGORITHM.FINNISH);
+		languages.put("french", SnowballStemmer.ALGORITHM.FRENCH);
+		languages.put("german", SnowballStemmer.ALGORITHM.GERMAN);
+		languages.put("hungarian", SnowballStemmer.ALGORITHM.HUNGARIAN);
+		languages.put("italian", SnowballStemmer.ALGORITHM.ITALIAN);
+		languages.put("norwegian", SnowballStemmer.ALGORITHM.NORWEGIAN);
+		languages.put("english2", SnowballStemmer.ALGORITHM.PORTER);
+		languages.put("portuguese", SnowballStemmer.ALGORITHM.PORTUGUESE);
+		languages.put("romanian", SnowballStemmer.ALGORITHM.ROMANIAN);
+		languages.put("russian", SnowballStemmer.ALGORITHM.RUSSIAN);
+		languages.put("spanish", SnowballStemmer.ALGORITHM.SPANISH);
+		languages.put("swedish", SnowballStemmer.ALGORITHM.SWEDISH);
+		languages.put("turkish", SnowballStemmer.ALGORITHM.TURKISH);
 
 		originalDictionary = new DictionaryStore();
 		processedDictionary = new DictionaryStore();
 
 		stemming = false;
 		if (stemmingLanguage != null) {
-			if (!languages.get(stemmingLanguage).isEmpty()) {
-				stemmingLanguage = languages.get(stemmingLanguage);
+			if (languages.get(stemmingLanguage) != null) {
+				stemmingAlgorithm = languages.get(stemmingLanguage);
 				stemming = true;
 			}
 		}
@@ -224,7 +230,7 @@ public class DictionaryAnnotator {
 		Concept concept;
 		StringBuilder sb;
 
-		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.DUTCH);
+		Stemmer stemmer = new SnowballStemmer(stemmingAlgorithm);
 		for (ProcessedText pt : processedTerms) {
 			sb = new StringBuilder();
 			sb.append(" ");
