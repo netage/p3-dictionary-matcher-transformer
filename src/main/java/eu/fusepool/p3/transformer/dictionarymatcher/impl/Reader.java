@@ -3,14 +3,11 @@ package eu.fusepool.p3.transformer.dictionarymatcher.impl;
 import java.io.InputStream;
 import java.util.Iterator;
 import org.apache.commons.lang.StringUtils;
-import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.*;
 
 /**
@@ -20,9 +17,6 @@ import org.apache.jena.vocabulary.*;
 public class Reader {
 
 	public static DictionaryStore readDictionary(InputStream inputStream, String contentType) {
-		Triple triple;
-		String label, lang;
-
 		DictionaryStore dictionary = new DictionaryStore();
 		Model model = ModelFactory.createDefaultModel();
 		model.read(inputStream, null);
@@ -30,6 +24,7 @@ public class Reader {
 		ResIterator typeTriples = model.listSubjectsWithProperty(RDF.type, SKOS.Concept);
 		while (typeTriples.hasNext()) {
 			RDFNode s = typeTriples.next();
+			String label, lang;
 			// getting prefLabels
 			Iterator<RDFNode> prefTriples = model.listObjectsOfProperty(s.asResource(), SKOS.prefLabel);
 			while (prefTriples.hasNext()) {
@@ -46,7 +41,7 @@ public class Reader {
 				}
 
 				if (StringUtils.isNotBlank(label) && StringUtils.isNotBlank(object.asLiteral().getString())) {
-					dictionary.addOriginalElement(label, SKOS.prefLabel, object.asLiteral().getString());
+					dictionary.addOriginalElement(label, SKOS.prefLabel, s.asNode().getURI().toString());
 				}
 			}
 
@@ -66,7 +61,7 @@ public class Reader {
 				}
 
 				if (StringUtils.isNotBlank(label) && StringUtils.isNotBlank(object.asLiteral().getString())) {
-					dictionary.addOriginalElement(label, SKOS.altLabel, object.asLiteral().getString());
+					dictionary.addOriginalElement(label, SKOS.altLabel, s.asNode().getURI().toString());
 				}
 			}
 		}
