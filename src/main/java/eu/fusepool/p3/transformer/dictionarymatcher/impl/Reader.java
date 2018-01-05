@@ -16,10 +16,9 @@ import org.apache.jena.vocabulary.*;
  */
 public class Reader {
 
-	public static DictionaryStore readDictionary(InputStream inputStream, String contentType) {
+	public static DictionaryStore readDictionary(Model skosModel) {
 		DictionaryStore dictionary = new DictionaryStore();
-		Model model = ModelFactory.createDefaultModel();
-		model.read(inputStream, null);
+		Model model = skosModel;
 
 		ResIterator typeTriples = model.listSubjectsWithProperty(RDF.type, SKOS.Concept);
 		while (typeTriples.hasNext()) {

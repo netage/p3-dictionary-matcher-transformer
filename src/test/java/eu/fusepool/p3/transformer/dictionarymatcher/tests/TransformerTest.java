@@ -25,6 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
 import org.junit.Before;
@@ -75,9 +76,10 @@ public class TransformerTest {
 
 			File initialFile = new File("src/test/resources/"+this.taxonomy);
 			InputStream inputStream = new FileInputStream(initialFile);
-			String contentType = "application/rdf+xml";
-			// get the dictionary from reading the SKOS file
-			dictionaryStore = Reader.readDictionary(inputStream, contentType);					
+			
+			Model m = ModelFactory.createDefaultModel();
+			m.read(inputStream, "RDF/XML");
+			dictionaryStore = Reader.readDictionary(m);					
 			Assert.assertTrue(dictionaryStore.getSize() == 3046);
 		}
 	}
@@ -106,9 +108,10 @@ public class TransformerTest {
 			if (!Cache.containsTaxonomy(taxonomy)) {
 				File initialFile = new File("src/test/resources/"+this.taxonomy);
 				InputStream inputStream = new FileInputStream(initialFile);
-				String contentType = "application/rdf+xml";
-				// get the dictionary from reading the SKOS file
-				dictionaryStore = Reader.readDictionary(inputStream, contentType);
+				
+				Model m = ModelFactory.createDefaultModel();
+				m.read(inputStream, "RDF/XML");
+				dictionaryStore = Reader.readDictionary(m);	
 
 				// process taxonomy
 				dictionaryAnnotator = new DictionaryAnnotator(dictionaryStore, stemmingLanguage, caseSensitivity, 0);
